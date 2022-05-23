@@ -25,5 +25,9 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
+//    std::cout << engine.rootObjects().size() << std::endl;
+    QObject* item = engine.rootObjects().first();
+    QObject::connect(item, SIGNAL(fileChangedSignal(QString)), &model, SLOT(changeData(QString)));
+
     return app.exec();
 }

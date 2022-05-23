@@ -19,7 +19,14 @@ public:
 
     Q_INVOKABLE virtual int rowCount(const QModelIndex &parent) const override;
     virtual QHash<int,QByteArray> roleNames() const override;
+
+public slots:
+    void changeData(QString newPath);
+signals:
+
 private:
+    void loadImagesFromDir(QString dir);
+
     std::vector<QString> m_images;
 };
 
