@@ -7,6 +7,7 @@ ColumnLayout {
     id: root
     width: parent.width
     height:400
+    signal imageOpened(string _imagePath);
 
     Button{
         id: chooseButton
@@ -26,12 +27,104 @@ ColumnLayout {
         }
     }
 
+    GridView{
+        id:grid
+        model: myModel
+
+        visible: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        flickableDirection: Flickable.VerticalFlick
+        boundsBehavior: Flickable.StopAtBounds
+
+        cellWidth: root.width / 4
+        cellHeight: 100
+        clip: true
+
+        delegate: Component {
+            Item {
+                id: item
+
+                width: grid.cellWidth; height: grid.cellHeight
+                property string imagePath: imagePathRole
+
+                Rectangle{
+                    anchors.fill: item
+                    anchors.margins: 10
+
+                    Image {
+                        id: image
+                        fillMode: Image.PreserveAspectFit
+
+                        width: parent.width
+                        height: parent.height - textEdit.height
+                        source : Qt.resolvedUrl("file:///" + imagePath)
+                    }
+                    TextEdit {
+                        id: textEdit
+
+                        anchors.left: parent.left
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        text: textMetrics.elidedText
+                    }
+                    TextMetrics {
+                        id: textMetrics
+                        elide: Text.ElideRight
+                        elideWidth: textEdit.width
+                        text: item.imagePath
+                    }
+                }
+                // borders
+                // bottom
+                Rectangle {
+                    width: parent.width
+                    height: 1
+                    color: "#a7a7a7"
+                    anchors.bottom: parent.bottom;
+                }
+                // top
+                Rectangle {
+                    width: parent.width
+                    height: 1
+                    color: "#a7a7a7"
+                    anchors.top: parent.top;
+                }
+                // right
+                Rectangle {
+                    width: 1
+                    height: parent.width
+                    color: "#a7a7a7"
+                    anchors.right: parent.right;
+                }
+                // left
+                Rectangle {
+                    width: 1
+                    height: parent.width
+                    color: "#a7a7a7"
+                    anchors.left: parent.left;
+                }
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        root.imageOpened(imagePath)
+                    }
+                }
+            }
+        }
+    }
+
+    PathView{
+        id: path
+        visible: false
+    }
+
     ListView {
         id: list
         model: myModel
 
-        signal imageOpened(string _imagePath);
-
+        visible: false
         Layout.fillWidth: true
         Layout.fillHeight: true
         flickableDirection: Flickable.VerticalFlick
@@ -85,11 +178,10 @@ ColumnLayout {
                     anchors.fill: parent
 
                     onClicked: {
-                        list.imageOpened(imagePath)
+                        root.imageOpened(imagePath)
                     }
                 }
             }
-
         }
     }
     Rectangle{
@@ -118,7 +210,7 @@ ColumnLayout {
         }
 
         Connections{
-            target: list
+            target: root
             function onImageOpened(_imagePath){
                 imageView.source = Qt.resolvedUrl("file:///" + _imagePath)
                 imageWrapper.visible = true
