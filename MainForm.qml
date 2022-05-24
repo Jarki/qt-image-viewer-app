@@ -23,13 +23,14 @@ ColumnLayout {
 
         onAccepted: {
             window.fileChangedSignal(fileDialog.currentFolder)
-            console.log("You chose: " + fileDialog.currentFolder)
         }
     }
 
     ListView {
         id: list
         model: myModel
+
+        signal imageOpened(string _imagePath);
 
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -40,7 +41,9 @@ ColumnLayout {
         delegate: Component {
             Item {
                 id: item
+
                 property string imagePath: imagePathRole
+
                 width: root.width
                 height: 100
 
@@ -78,8 +81,50 @@ ColumnLayout {
                     color: "#a7a7a7"
                     anchors.bottom: parent.bottom;
                 }
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        list.imageOpened(imagePath)
+                    }
+                }
             }
 
         }
     }
+    Rectangle{
+        id:imageWrapper
+        visible: false
+
+        width: parent.width
+        height: parent.height
+
+        Image{
+            id: imageView
+
+            height: parent.height
+            fillMode: Image.PreserveAspectFit
+            // this centers
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            // this does not
+            // anchors.centerIn: parent.Center
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: {
+                imageWrapper.visible = false
+            }
+        }
+
+        Connections{
+            target: list
+            function onImageOpened(_imagePath){
+                imageView.source = Qt.resolvedUrl("file:///" + _imagePath)
+                imageWrapper.visible = true
+            }
+        }
+    }
 }
+
+
