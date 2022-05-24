@@ -31,7 +31,7 @@ ColumnLayout {
         id:grid
         model: myModel
 
-        visible: true
+        visible: false
         Layout.fillWidth: true
         Layout.fillHeight: true
         flickableDirection: Flickable.VerticalFlick
@@ -115,9 +115,59 @@ ColumnLayout {
         }
     }
 
-    PathView{
+    PathView {
         id: path
-        visible: false
+        model: myModel
+
+        visible: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        pathItemCount: 3
+        path: Path {
+            startX: 0; startY: parent.height / 2
+            PathLine { x: parent.width; y: parent.height/2 }
+        }
+
+        preferredHighlightBegin: 0.5                         //
+        preferredHighlightEnd: 0.5                           // That should center the current item
+        highlightRangeMode: PathView.StrictlyEnforceRange
+        clip: true
+
+        delegate: Component {
+            Column{
+                property string imagePath: imagePathRole
+
+                opacity: PathView.isCurrentItem ? 1 : 0.5
+                Image {
+                    id: image
+                    fillMode: Image.PreserveAspectFit
+
+                    width: root.width / 3
+                    source : Qt.resolvedUrl("file:///" + imagePath)
+
+                                        MouseArea{
+                                            anchors.fill: parent
+
+                                            onClicked: {
+                                                root.imageOpened(imagePath)
+                                            }
+                                        }
+                }
+                                TextEdit {
+                                    id: textEdit
+
+                                    width: image.width
+                                    text: textMetrics.elidedText
+                                }
+                                TextMetrics {
+                                    id: textMetrics
+                                    elide: Text.ElideRight
+                                    elideWidth: textEdit.width
+                                    text: imagePath
+                                }
+            }
+        }
     }
 
     ListView {
