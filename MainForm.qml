@@ -16,7 +16,48 @@ ColumnLayout {
         onClicked: fileDialog.open()
         text: "Choose a directory"
     }
+    Column{
+        id: changeViewButtons
+        Layout.fillWidth: true
 
+        Button{
+            id: listButton
+
+            width:parent.width
+            anchors.left: parent.left
+            onClicked: {
+                console.log("A")
+                path.visible = false
+                grid.visible = false
+                list.visible = true
+            }
+            text: "List view"
+        }
+        Button{
+            id: gridButton
+
+            width:parent.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                path.visible = false
+                list.visible = false
+                grid.visible = true
+            }
+            text: "Grid view"
+        }
+        Button{
+            id: pathButton
+
+            width:parent.width
+            anchors.right: parent.right
+            onClicked: {
+                grid.visible = false
+                list.visible = false
+                path.visible = true
+            }
+            text: "Path view"
+        }
+    }
     FolderDialog {
         id: fileDialog
 
@@ -146,26 +187,26 @@ ColumnLayout {
                     width: root.width / 3
                     source : Qt.resolvedUrl("file:///" + imagePath)
 
-                                        MouseArea{
-                                            anchors.fill: parent
+                    MouseArea{
+                        anchors.fill: parent
 
-                                            onClicked: {
-                                                root.imageOpened(imagePath)
-                                            }
-                                        }
+                        onClicked: {
+                            root.imageOpened(imagePath)
+                        }
+                    }
                 }
-                                TextEdit {
-                                    id: textEdit
+                TextEdit {
+                    id: textEdit
 
-                                    width: image.width
-                                    text: textMetrics.elidedText
-                                }
-                                TextMetrics {
-                                    id: textMetrics
-                                    elide: Text.ElideRight
-                                    elideWidth: textEdit.width
-                                    text: imagePath
-                                }
+                    width: image.width
+                    text: textMetrics.elidedText
+                }
+                TextMetrics {
+                    id: textMetrics
+                    elide: Text.ElideRight
+                    elideWidth: textEdit.width
+                    text: imagePath
+                }
             }
         }
     }
