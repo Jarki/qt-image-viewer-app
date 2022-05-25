@@ -9,6 +9,11 @@ ColumnLayout {
     height:400
     signal imageOpened(string _imagePath);
 
+    function basename(str)
+    {
+        return (str.slice(str.lastIndexOf("/")+1))
+    }
+
     Button{
         id: chooseButton
         Layout.fillWidth: true
@@ -112,7 +117,7 @@ ColumnLayout {
                         id: textMetrics
                         elide: Text.ElideRight
                         elideWidth: textEdit.width
-                        text: item.imagePath
+                        text: basename(item.imagePath)
                     }
                 }
                 // borders
@@ -204,7 +209,7 @@ ColumnLayout {
                     id: textMetrics
                     elide: Text.ElideRight
                     elideWidth: textEdit.width
-                    text: imagePath
+                    text: basename(imagePath)
                 }
             }
         }
@@ -246,7 +251,7 @@ ColumnLayout {
                         id: textMetrics
                         elide: Text.ElideRight
                         elideWidth: textEdit.width
-                        text: item.imagePath
+                        text: basename(item.imagePath)
                     }
                     Image {
                         id: image
