@@ -26,7 +26,6 @@ ColumnLayout {
             width:parent.width
             anchors.left: parent.left
             onClicked: {
-                console.log("A")
                 path.visible = false
                 grid.visible = false
                 list.visible = true
@@ -166,8 +165,8 @@ ColumnLayout {
 
         pathItemCount: 3
         path: Path {
-            startX: 0; startY: parent.height / 2
-            PathLine { x: parent.width; y: parent.height/2 }
+            startX: 0; startY: parent.height / 3
+            PathLine { x: parent.width; y: parent.height/3 }
         }
 
         preferredHighlightBegin: 0.5                         //

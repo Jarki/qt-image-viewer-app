@@ -5,19 +5,8 @@
 #include <iostream>
 
 MyImageModel::MyImageModel(QObject* parent)
-    :  QAbstractListModel(parent)
-{
-    QString path = "D:\\images_example\\testing_example";
-
-    for(auto &i : QDir(path).entryInfoList()){
-        // determines whether qt can read the file as an image
-        if(QImageReader::imageFormat(i.absoluteFilePath()) == ""){
-            continue;
-        }
-        m_images.push_back(i.absoluteFilePath());
-        std::cout << i.absoluteFilePath().toStdString() << std::endl;
-    }
-}
+    :  QAbstractListModel(parent), m_images(std::vector<QString>())
+{}
 
 QVariant MyImageModel::data(const QModelIndex& index, int role) const
 {
