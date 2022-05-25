@@ -23,3 +23,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     myimagemodel.h
+
+DISTFILES += \
+    README.md
